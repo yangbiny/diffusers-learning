@@ -12,20 +12,20 @@ def display_sample(sample, i):
     img_processed = img_processed.numpy().astype(np.uint8)
 
     image_pil = PIL.Image.fromarray(img_processed[0])
-    image_pil.save("/Users/reasonknow/Desktop/test.png")
+    image_pil.save("/tmp/result/test.png")
 
 
-repo_id = "/Users/reasonknow/.cache/huggingface/hub/models--google--ddpm-cat-256/snapshots/a30605ddf01544f8b55415aacdf2d3d3070e7113"
-model = UNet2DModel.from_pretrained(repo_id, proxies={'http': 'http://127.0.0.1:1081',
-                                                      'https': 'http://127.0.0.1:1081'})
+repo_id = "google/ddpm-cat-256"
+scheduler = DDPMScheduler.from_config(repo_id)
+scheduler.set_timesteps(50)
+model = UNet2DModel.from_pretrained(repo_id, proxies={'http': 'http://127.0.0.1:20171',
+                                                      'https': 'http://127.0.0.1:20171'}).to("cuda")
 config = model.config
-torch.manual_seed(0)
-noisy_sample = torch.randn((1, config.in_channels, config.sample_size, config.sample_size))
+
+noisy_sample = torch.randn((1, config.in_channels, config.sample_size, config.sample_size)).to("cuda")
 
 with torch.no_grad():
     noisy_residual = model(sample=noisy_sample, timestep=2).sample
-
-scheduler = DDPMScheduler.from_config(repo_id)
 
 less_noisy_sample = scheduler.step(model_output=noisy_residual, timestep=2, sample=noisy_sample).prev_sample
 
