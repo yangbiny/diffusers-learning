@@ -17,5 +17,7 @@ for file_path in $folder_path/*; do
             --device cuda \
             --from_safetensors \
             --dump_path "/Users/reasonknow/Downloads/models/d/$model_name"
+
+        mv /Users/reasonknow/Downloads/models/sd/$string /Users/reasonknow/Downloads/models/sd/do/$string
     fi
 done

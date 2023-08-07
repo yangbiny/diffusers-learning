@@ -1,7 +1,7 @@
 import torch
 from diffusers import StableDiffusionPipeline
 
-repo_id = "/Users/reasonknow/Downloads/models/d/majicmixAlpha_v10"
+repo_id = "/Users/reasonknow/Downloads/models/d/beenyou_r13"
 pipeline = StableDiffusionPipeline.from_pretrained(repo_id, proxies={"https": "http://127.0.0.1:1081"})
 
 prompt = "handsome male,big muscle,suit,feather coat,monochrome photography,dutch angle,outdoor"
