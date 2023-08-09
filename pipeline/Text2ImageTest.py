@@ -1,5 +1,5 @@
 import torch
-from diffusers import StableDiffusionPipeline
+from diffusers import StableDiffusionPipeline, EulerAncestralDiscreteScheduler
 
 repo_id = "/Users/reasonknow/Downloads/models/d/beenyou_r13"
 pipeline = StableDiffusionPipeline.from_pretrained(repo_id, proxies={"https": "http://127.0.0.1:1081"})
@@ -9,13 +9,16 @@ negative_prompt = "nsfw,ng_deepnegative_v1_75t,badhandv4,(worst quality:2),(low 
 generator = torch.manual_seed(1345692449)
 pipeline.clip_skip = 2
 
+scheduler = EulerAncestralDiscreteScheduler.from_config(pipeline.scheduler.config)
+
 with torch.no_grad():
     pipeline(
         prompt=prompt,
         negative_prompt=negative_prompt,
         num_inference_steps=30,
         guidance_scale=7,
-        generator=generator
+        generator=generator,
+        scheduler=scheduler
     )
 
 print(pipeline)
